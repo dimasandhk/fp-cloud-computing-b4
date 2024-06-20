@@ -83,6 +83,12 @@ Pertimbangan ini diambil karena Digital Ocean yang paling user friendly dan meny
 
 <img src="./postprod.png" />
 
+### Pengujian dari Web
+
+<img src="./testweb1.jpg" />
+
+<img src="./testweb2.jpg" />
+
 ## Hasil Pengujian dan Analisis Loadtesting Locust
 
 - RPS Maksimum (load testing 60 detik)
