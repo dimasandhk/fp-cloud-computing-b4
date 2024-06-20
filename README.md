@@ -2,8 +2,6 @@
 
 ### Teknologi Komputasi Awan
 
-**Kelas B**
-
 **Kelompok B4**
 |Nama|NRP |
 |--|--|
@@ -70,13 +68,54 @@ Pertimbangan ini diambil karena Digital Ocean yang paling user friendly dan meny
 **Berikut adalah rancangan arsitektur yang akan kami buat:**
 <img src="./rancangan.png"/>
 
+**Harga perkiraan yang akan kami pakai adalah seperti berikut:**
 <img src="./harga.png" />
 
 ## Hasil Pengujian Setiap Endpoint
+
+### Pengujian dengan Thunder Client
 
 1. Get All History
 
 <img src="./getprod.png" />
 
 2. Create a New Text
-   <img src="./postprod.png" />
+
+<img src="./postprod.png" />
+
+## Hasil Pengujian dan Analisis Loadtesting Locust
+
+- RPS Maksimum (load testing 60 detik)
+
+> **RPS Maksimum yang kami dapati dari beberapa stress test locust adalah 149 RPS, didapatkan ketika di test dengan menggunakan spawn rate 500 dengan Peak Concurrency Maksimum sebesar 2000 User**
+
+- Peak Concurrency Maksimum (spawn rate 50, load testing 60 detik)
+
+<img src="./500(50).jpg" />
+> 500 PCM
+
+- Peak Concurrency Maksimum (spawn rate 100, load testing 60 detik)
+
+<img src="./1000(100).jpg" />
+> 1000 PCM
+
+- Peak Concurrency Maksimum (spawn rate 200, load testing 60 detik)
+
+<img src="./1600(200).jpg" />
+> 1600 PCM
+
+- Peak Concurrency Maksimum (spawn rate 500, load testing 60 detik)
+
+<img src="./2000(500).png" />
+> 2000 PCM
+
+## Kesimpulan dan Saran
+
+Setelah percobaan yang kami lakukan berulang kali untuk testing locust ini, yang kami dapatkan adalah:
+
+- Banyak hal yang mempengaruhi pengujian locust ini seperti **Koneksi internet, Peak concurrency yang diinput (bagian dari test), spawn rate yang diinput**
+- Selain itu untuk spawn rate yang tinggi kami sempat beberapa kali mengalami vm backendnya ngelag. Solusi kami adalah untuk **mereset database tiap ingin menguji locust**. Hal itu sangat berpengaruh tiap kali ingin mengetest dengan uji locust, dikarenakan banyaknya data yang diinput oleh locust untuk pengujiannya
+
+> Seperti gambar berikut, kami sempat mendapatkan bahwa data di database kami sempat ada 24k (kami mendapatkan ini sebelum menyadari bahwa data yang diinput oleh locust dalam pengujian sangat banyak)
+
+<img src="./banyak.jpg" />
