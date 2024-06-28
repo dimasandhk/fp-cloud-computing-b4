@@ -368,7 +368,7 @@ setelah itu kita bisa restart dengan `sudo systemctl restart nginx` dan akses ip
 
 - Peak Concurrency Maksimum **4000** (**spawn rate 500**, load testing 60 detik)
 
-<img src="./img/locust4.jpg" />
+<img src="./img/locust4.jpg" /><br>
 
 # VI) Revisi, Kesimpulan, dan Saran
 
@@ -385,12 +385,23 @@ Setelah melakukan beberapa konfigurasi ulang, berikut ini adalah poin-poin penti
 
 Hasil pengujian Locust menunjukkan bahwa rancangan layanan awan dapat menampung beban hingga 1015 Requests per Second (RPS) tanpa adanya kegagalan, mengindikasikan bahwa arsitektur cloud yang digunakan stabil dan tidak mengalami error meskipun di bawah beban yang sangat tinggi. Namun, waktu respons mulai meningkat secara signifikan setelah mencapai sekitar 600 RPS, menunjukkan adanya limit atau bottleneck di mana konfigurasi mulai kewalahan menangani permintaan. Waktu respons rata-rata stabil di sekitar 200 ms pada beban rendah hingga menengah, tetapi meningkat pada beban tinggi. Kapasitas maksimum yang didapatkan dapat mencapai 1015 RPS dengan efektivitas berkisar antara 600-700 RPS, setelah itu performa menurun sehingga layanan tidak berjalan secara optimal di atas beban tersebut.
 
---------------------d<br>
-**Ini kesimpulan saran sebelumnya ges**
+### SARAN
 
-Setelah percobaan yang kami lakukan berulang kali untuk testing locust ini, yang kami dapatkan adalah:
+#### Jaringan dan Koneksi:
 
-- Banyak hal yang mempengaruhi pengujian locust ini seperti **Koneksi internet, Peak concurrency yang diinput (bagian dari test), spawn rate yang diinput**
-- Selain itu untuk spawn rate yang tinggi kami sempat beberapa kali mengalami vm backendnya ngelag. Solusi kami adalah untuk **mereset database tiap ingin menguji locust**. Hal itu sangat berpengaruh tiap kali ingin mengetest dengan uji locust, dikarenakan banyaknya data yang diinput oleh locust untuk pengujiannya
+Pastikan **koneksi internet stabil dan memiliki bandwidth yang mencukupi untuk menghindari fluktuasi yang dapat memengaruhi hasil pengujian**. Pengaturan jaringan VM juga penting untuk memastikan bahwa koneksi ke aplikasi atau sistem yang diuji cukup lancar.
+
+#### Load Balancer Alternatif:
+
+Menggunakan **VM sebagai pengganti load balancer** merupakan pilihan yang bisa dipertimbangkan, terutama jika kita ingin mengontrol secara langsung distribusi lalu lintas atau memiliki kebutuhan khusus terkait konfigurasi jaringan.
+
+#### Skalabilitas:
+
+Pertimbangkan kemampuan untuk **menskalakan VM** sesuai dengan kebutuhan pengujian. Hal ini memungkinkan kita untuk menyesuaikan kapasitas infrastruktur secara dinamis jika diperlukan.
+Dengan mempertimbangkan faktor-faktor ini dalam konfigurasi VM untuk pengujian dengan Locust, kita dapat meningkatkan kualitas pengujian dan meminimalkan dampak dari variabel-variabel eksternal yang dapat mempengaruhi hasil pengujian.
+
+#### Optimasi Performa Backend:
+
+Untuk mengatasi masalah lag pada VM backend saat menggunakan spawn rate tinggi, pertimbangkan untuk melakukan optimisasi pada aplikasi backend atau infrastruktur database. **Bisa dengan cara hapus data di database, atau hapus cache nginx pada load balancer setiap kali ingin test locust**
 
 > Kami sempat mendapatkan bahwa data di database kami sempat ada 24k (kami mendapatkan ini sebelum menyadari bahwa data yang diinput oleh locust dalam pengujian sangat banyak)
