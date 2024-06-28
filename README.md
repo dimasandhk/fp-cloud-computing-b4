@@ -1,6 +1,4 @@
-# Final Project
-
-### Teknologi Komputasi Awan
+# Final Project Cloud Computing
 
 **Kelompok B4**
 |Nama|NRP |
@@ -11,13 +9,13 @@
 |Kevin Anugerah Faza|5027221027|
 |Aryasatya Alaauddin|5027221082|
 
-## Permasalahan
+# I) Introduksi Permasalahan
 
 Anda adalah seorang lulusan Teknologi Informasi, sebagai ahli IT, salah satu kemampuan yang harus dimiliki adalah **Keampuan merancang, membangun, mengelola aplikasi berbasis komputer menggunakan layanan awan untuk memenuhi kebutuhan organisasi.**
 
 Pada suatu saat anda mendapatkan project untuk mendeploy sebuah aplikasi Sentiment Analysis dengan komponen Backend menggunakan python: sentiment-analysis.py dengan spesifikasi sebagai berikut
 
-## Endpoints:
+### Endpoints:
 
 1. **Analyze Text**
 
@@ -54,26 +52,28 @@ Pada suatu saat anda mendapatkan project untuk mendeploy sebuah aplikasi Sentime
 
 Kemudian juga disediakan sebuah Frontend sederhana menggunakan [index.html](/Resources/FE/index.html) dan [styles.css](/Resources/FE/styles.css) dengan tampilan antarmuka sebagai berikut
 
-![alt text](image.png)
+![](./img/preview-fe.png)
 
 Kemudian anda diminta untuk mendesain arsitektur cloud yang sesuai dengan kebutuhan aplikasi tersebut. Apabila dana maksimal yang diberikan adalah **1 juta rupiah per bulan (65 US$)**
 konfigurasi cloud terbaik seperti apa yang bisa dibuat?
 
-## Rancangan Arsitektur dan Tabel Harga Spesifikasi VM
+# II) Rancangan Arsitektur dan Tabel Harga Spesifikasi VM
 
-Setelah melakukan berbagai pertimbangan dari segi harga hingga spesifikasi. Akhirnya kami memutuskan untuk menggunakan Digital Ocean sebagai lingkungan cloud yang akan kami gunakan.
+Di revisi ini, kami mengubah rancangan arsitektur menjadi menggunakan 3 droplet VM dengan cloud provider **digital ocean**. Kami menggunakan 3 droplet VM dengan spesifikasi sebagai berikut:
 
-Pertimbangan ini diambil karena Digital Ocean yang paling user friendly dan menyediakan credit gratis jika punya github education, dari semua cloud provider yang kami lihat digital ocean yang paling gampang dipahami.
+<img src="./img/vm-amd.png" />
 
-**Berikut adalah rancangan arsitektur yang akan kami buat:**
-<img src="./rancangan.png"/>
+Untuk ketiga VM kami menggunakan droplet VM digital ocean dengan spesifikasi tersebut, jadi total biaya yang kami keluarkan sekitar
 
-**Harga perkiraan yang akan kami pakai adalah seperti berikut:**
-<img src="./harga.png" />
+> **3 VM x $21 = $63**
 
-## Hasil Pengujian Setiap Endpoint
+# III) Implementasi dan Konfigurasi Teknologi
 
-### Pengujian dengan Thunder Client
+da
+
+# IV) Hasil Pengujian Setiap Endpoint
+
+### Pengujian dengan Rest Client
 
 1. Get All History
 
@@ -83,39 +83,45 @@ Pertimbangan ini diambil karena Digital Ocean yang paling user friendly dan meny
 
 <img src="./postprod.png" />
 
-### Pengujian dari Web
+### Pengujian dari Frontend
 
 <img src="./testweb1.jpg" />
 
 <img src="./testweb2.jpg" />
 
-## Hasil Pengujian dan Analisis Loadtesting Locust
+# V) Hasil Pengujian dan Analisis Loadtesting Locust
 
 - RPS Maksimum (load testing 60 detik)
 
-> **RPS Maksimum yang kami dapati dari beberapa stress test locust adalah 149 RPS, didapatkan ketika di test dengan menggunakan spawn rate 500 dengan Peak Concurrency Maksimum sebesar 2000 User**
+> **RPS Maksimum yang kami dapati dari beberapa stress test locust adalah ~890 RPS, didapatkan ketika di test dengan menggunakan spawn rate 500 dengan Peak Concurrency Maksimum sebesar 4000 User**
 
 - Peak Concurrency Maksimum (spawn rate 50, load testing 60 detik)
 
 <img src="./500(50).jpg" />
 > 500 PCM
 
+<hr>
+
 - Peak Concurrency Maksimum (spawn rate 100, load testing 60 detik)
 
 <img src="./1000(100).jpg" />
 > 1000 PCM
+
+<hr>
 
 - Peak Concurrency Maksimum (spawn rate 200, load testing 60 detik)
 
 <img src="./1600(200).jpg" />
 > 1600 PCM
 
+<hr>
+
 - Peak Concurrency Maksimum (spawn rate 500, load testing 60 detik)
 
 <img src="./2000(500).png" />
 > 2000 PCM
 
-## Kesimpulan dan Saran
+# VI) Kesimpulan dan Saran
 
 Setelah percobaan yang kami lakukan berulang kali untuk testing locust ini, yang kami dapatkan adalah:
 
