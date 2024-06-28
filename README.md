@@ -9,6 +9,8 @@
 |Kevin Anugerah Faza|5027221027|
 |Aryasatya Alaauddin|5027221082|
 
+Demo Youtube: https://youtu.be/SdVI43f2Rxo
+
 # I) Introduksi Permasalahan
 
 Anda adalah seorang lulusan Teknologi Informasi, sebagai ahli IT, salah satu kemampuan yang harus dimiliki adalah **Keampuan merancang, membangun, mengelola aplikasi berbasis komputer menggunakan layanan awan untuk memenuhi kebutuhan organisasi.**
