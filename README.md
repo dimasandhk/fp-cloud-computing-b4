@@ -87,7 +87,7 @@ VM untuk setiap worker kami install beberapa dependencies:
   - Gevent: Library untuk concurrency di Python, memungkinkan aplikasi untuk menangani banyak koneksi secara efisien.
 - MongoDB database untuk menyimpan hasil sentimen beserta teksnya
 
-**Setup Frontend:**
+#### **Setup Frontend:**
 
 ```
 sudo apt-get update
@@ -126,6 +126,52 @@ sudo systemctl restart nginx
 ```
 
 selesai, setup untuk frontend sudah selesai dan siap untuk digunakan
+
+#### **Setup Backend:**
+
+Untuk backend kita pertama perlu menginstall pip dan virtual environment
+
+```
+sudo apt-get update
+sudo apt-get install python3-pip python3-venv
+```
+
+karena sudah clone repo github `fp-tka` sebelumnya jadi kita tinggal pakai file yang sudah di clone sebelumnya, kita perlu masuk ke direktori `fp-tka/Resources/BE`, membuat virtual environment, dan install semua dependencies python yang sudah disebutkan sebelumnya
+
+```
+cd fp-tka/Resources/BE
+python3 -m venv venv
+source venv/bin/activate
+```
+
+setelah itu seharusnya tampilan dari prompt terminal sedikit berubah, dan package python telah terisolasi
+
+<img src="./img-config/setup-be1.png" />
+
+jika tampilan prompt terminal sudah berubah seperti gambar di atas kita bisa install package python yang diperlukan
+
+```
+pip install flask flask-cors textblob pymongo gunicorn gevent
+```
+
+setelah itu kita bisa harus ubah nama file pythonnya terlebih dahulu dari `sentiment-analysis.py` menjadi `sentiment_analysis.py` dan langsung menjalankan backend aplikasi flask dengan daemon tanpa konfigurasi lain2
+
+```
+gunicorn -b 0.0.0.0:80 -w 5 -k gevent --timeout 60 --graceful-timeout 60 sentiment_analysis:app --daemon
+```
+
+- gunicorn: Menjalankan Gunicorn, WSGI HTTP server untuk aplikasi Python
+- -b 0.0.0.0:80: Bind server ke alamat IP 0.0.0.0 pada port 80. Server akan dapat diakses dari semua alamat IP yang dapat menjangkau server.
+- -w 5: Menentukan jumlah worker yang akan dijalankan oleh Gunicorn. Dalam hal ini, 5 worker.
+- -k gevent: Menggunakan worker tipe gevent, yang mendukung concurrency dengan menggunakan greenlet untuk menangani banyak koneksi secara efisien.
+- --timeout 60: Menentukan waktu maksimum dalam detik yang diizinkan untuk setiap request sebelum worker dibunuh dan direstart.
+- --graceful-timeout 60: Menentukan waktu tambahan dalam detik yang diberikan kepada worker untuk menyelesaikan request yang sedang diproses sebelum dipaksa untuk berhenti.
+- sentiment_analysis:app: Menunjukkan modul dan aplikasi Flask yang akan dijalankan oleh Gunicorn. sentiment_analysis adalah nama modul, dan app adalah instance aplikasi Flask.
+- --daemon: Menjalankan Gunicorn dalam mode daemon, sehingga proses akan berjalan di latar belakang.
+
+Jika sudah berhasil seharusnya kita juga bisa akses endpoint backend di vm tersebut dengan port 80
+
+<img src="./img-config/setup-be2.png" /><br>
 
 # IV) Hasil Pengujian Setiap Endpoint
 
