@@ -242,7 +242,6 @@ berikut adalah konfigurasi yang dipakai untuk loadbalancernya
 ```
 upstream backend_servers {
 	server 152.42.251.221;
-	# VM2
 	server 128.199.103.250;
 }
 
