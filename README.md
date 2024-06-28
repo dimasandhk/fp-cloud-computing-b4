@@ -127,6 +127,54 @@ sudo systemctl restart nginx
 
 selesai, setup untuk frontend sudah selesai dan siap untuk digunakan
 
+<hr>
+
+#### **Setup Database MongoDB:**
+
+Pertama kita perlu menginstall mongodb di worker vmnya, caranya adalah sebagai berikut
+
+> Referensi: https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/
+
+1. Import public key yang digunakan oleh package management systemnya
+
+```
+sudo apt-get install gnupg curl
+```
+
+lalu import MongoDB public GPG keynya
+
+```
+curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | \
+   sudo gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg \
+   --dearmor
+```
+
+2. Buat list file untuk MongoDB
+
+buat list file di `/etc/apt/sources.list.d/mongodb-org-7.0.list`
+
+```
+echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+```
+
+3. Install MongoDB package
+
+```
+sudo apt-get update
+sudo apt-get install -y mongodb-org
+```
+
+Terakhir kita bisa langsung aktifkan mongodbnya dan konfigurasi firewall untuk mengizinkan koneksi ke port default MongoDB (27017)
+
+```
+sudo systemctl enable mongod
+sudo ufw allow 27017
+```
+
+setup database selesai, database siap digunakan
+
+<hr>
+
 #### **Setup Backend:**
 
 Untuk backend kita pertama perlu menginstall pip dan virtual environment
