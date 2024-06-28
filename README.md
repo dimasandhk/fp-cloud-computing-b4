@@ -221,6 +221,105 @@ Jika sudah berhasil seharusnya kita juga bisa akses endpoint backend di vm terse
 
 <img src="./img-config/setup-be2.png" /><br>
 
+### Konfigurasi Load Balancer
+
+Untuk konfigurasi vm sebagai load-balancer kita juga perlu menginstall nginx di vm tersebut
+
+```
+sudo apt-get update
+sudo apt-get install nginx
+```
+
+lalu kita perlu menghapus tautan simbolis (symlink) dari file konfigurasi default Nginx yang biasanya terletak di `/etc/nginx/sites-enabled/default` dan membuat konfigurasi baru di `/etc/nginx/sites-available/app`
+
+```
+sudo unlink /etc/nginx/sites-enabled/default
+sudo nano  /etc/nginx/sites-available/app
+```
+
+berikut adalah konfigurasi yang dipakai untuk loadbalancernya
+
+```
+upstream backend_servers {
+	server 152.42.251.221;
+	# VM2
+	server 128.199.103.250;
+}
+
+server {
+    listen 80;
+    server_name 157.230.246.133;
+
+    location / {
+        proxy_cache my_cache;
+        proxy_cache_valid 200 302 10m;
+        proxy_cache_valid 404 1m;
+
+        proxy_cache_use_stale error timeout updating http_500 http_502 http_503 http_504;
+        proxy_cache_lock on;
+        proxy_cache_lock_timeout 5s;
+
+        proxy_pass http://backend_servers;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        add_header X-Cached $upstream_cache_status;
+    }
+}
+```
+
+konfigurasi tersebut adalah load balancer dengan algoritma round robin yang menampung 2 vm worker. Setelah itu kita perlu membuat tautan simbolis (symlink) dari file konfigurasi Nginx di `/etc/nginx/sites-available/` ke direktori `/etc/nginx/sites-enabled/`
+
+terakhir kita perlu ubah file konfigurasi `/etc/nginx/nginx.conf` untuk membuat tambahan pengaturan cache, yang tidak ada dalam konfigurasi default Nginx. Pengaturan cache ini mengkonfigurasi jalur cache, ukuran maksimal cache, dan handling penggunaan cache ketika terjadi kesalahan server.
+
+konfigurasinya seperti berikut:
+
+```
+user www-data;
+worker_processes auto;
+error_log /var/log/nginx/error.log warn;
+pid /var/run/nginx.pid;
+worker_rlimit_nofile 100000;
+
+events {
+    worker_connections 4096;
+}
+
+http {
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+    log_format main '$remote_addr - $remote_user [$time_local] '
+                    '"$request" $status $body_bytes_sent '
+                    '"$http_referer" "$http_user_agent" '
+                    '"$http_x_forwarded_for"';
+
+    access_log /var/log/nginx/access.log main;
+
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay on;
+    keepalive_timeout 65;
+    types_hash_max_size 2048;
+
+    # Konfigurasi cache
+    proxy_cache_path /var/cache/nginx levels=1:2 keys_zone=my_cache:10m max_size=10g inactive=60m;
+    proxy_temp_path /var/cache/nginx/temp;
+    proxy_cache_use_stale error timeout updating http_500 http_502 http_503 http_504;
+    proxy_cache_lock on;
+    proxy_cache_lock_timeout 5s;
+
+    include /etc/nginx/conf.d/*.conf;
+    include /etc/nginx/sites-enabled/*;
+}
+```
+
+setelah itu kita bisa restart dengan `sudo systemctl restart nginx` dan akses ip vm tersebut untuk mengakses load balancer
+
+<img src="./img-config/setup-lb1.png" /><br>
+
 # IV) Hasil Pengujian Setiap Endpoint
 
 ### Pengujian dengan Rest Client (Salah satu vm)
